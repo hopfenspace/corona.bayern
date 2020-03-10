@@ -12,7 +12,7 @@ function render(entries)
     for(var i = 0; i < entries.length; i++) {
         var entry = entries[i];
     
-        L.marker([entry.lat, entry.lng])
+        L.circle([entry.lat, entry.lng], {radius: entry.sick * 150, color: 'red', fillOpacity: 0.7})
             .addTo(mymap)
             .bindPopup("<b>" + entry.name + "</b>" +
                 "<br />Infiziert: " + (entry.sick || 0) +
