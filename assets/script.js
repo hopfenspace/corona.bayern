@@ -15,9 +15,9 @@ function render(entries)
         L.circle([entry.lat, entry.lng], {radius: entry.sick * 150, color: 'red', fillOpacity: 0.7})
             .addTo(mymap)
             .bindPopup("<b>" + entry.name + "</b>" +
-                "<br />Infiziert: " + (entry.sick || 0) +
-                "<br />Geheilt: " + (entry.cured || 0) +
-                "<br />Todesfälle: " + (entry.deaths || 0)
+                "<br />Infiziert: " + entry.sick +
+                "<br />Geheilt: " + entry.cured +
+                "<br />Todesfälle: " + entry.deaths
                 );
     }
 }

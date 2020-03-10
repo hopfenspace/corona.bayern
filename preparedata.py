@@ -17,9 +17,9 @@ for entry in data["data_db"]["objects"]:
 
 	bavariaData.append({
 		"name": entry["title"],
-		"sick": entry["infizierte"],
-		"cured": entry["geheilte"],
-		"deaths": entry["todesfaelle"],
+		"sick": entry["infizierte"] or "0",
+		"cured": entry["geheilte"] or "0",
+		"deaths": entry["todesfaelle"] or "0",
 		"lat": loc["lat"],
 		"lng": loc["lng"],
 	})
