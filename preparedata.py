@@ -1,7 +1,8 @@
 import json
 
 with open("rawdata.json", "r") as fd:
-	data = json.load(fd)
+	data = fd.read().replace("\\\\", "\\")
+	data = json.loads(data)
 
 bavariaData = []
 
