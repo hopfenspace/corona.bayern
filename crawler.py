@@ -50,7 +50,8 @@ def main():
         lat = Column(Float)
         lng = Column(Float)
 
-    sessionmaker(bind=engine)
+    session_builder = sessionmaker(bind=engine)
+    session = session_builder()
 
     data_list = []
 
@@ -75,6 +76,9 @@ def main():
             d.lat = item["location"]["lat"]
             d.lng = item["location"]["lng"]
         data_list.append(d)
+
+    session.add_all(data_list)
+    session.commit()
 
 
 if __name__ == '__main__':
