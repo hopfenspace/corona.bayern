@@ -1,4 +1,12 @@
-import re, json, urllib.request, dateutil.parser as dateparser
+import re, json, datetime, urllib.request
+
+def try_parsing_date(text):
+    for fmt in ('Stand: %d.%m.%Y, %H:%M Uhr', 'Stand: %H:%M Uhr, %d.%m.%Y ', 'Stand: %H:%M Uhr, %d.%m.%Y'):
+        try:
+            return datetime.datetime.strptime(text, fmt)
+        except ValueError:
+            pass
+    raise ValueError('no valid date format found')
 
 data = urllib.request.urlopen("https://coronamaps.de/covid-19-coronavirus-live-karte-bayern/").read().decode("utf-8")
 data = re.search("var mapsvg_options = (.*?);jQuery", data, re.UNICODE)
@@ -15,14 +23,12 @@ for entry in data["data_db"]["objects"]:
 		print(loc)
 		continue
 
-	changed = dateparser.parse(entry["datum"][7 : ].replace("Uhr", ""))
-
 	bavariaData.append({
 		"name": entry["title"],
 		"sick": entry["infizierte"] or "0",
 		"cured": entry["geheilte"] or "0",
 		"deaths": entry["todesfaelle"] or "0",
-		"updated": changed.strftime("%d.%m.%Y %H:%M"),
+		"updated": try_parsing_date(entry["datum"]).strftime("%d.%m.%Y %H:%M"),
 		"lat": loc["lat"],
 		"lng": loc["lng"],
 	})
