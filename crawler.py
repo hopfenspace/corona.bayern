@@ -32,6 +32,7 @@ def main():
         __tablename__ = 'data'
 
         id = Column(Integer, primary_key=True)
+        title = Column(String(200))
         infected = Column(Integer)
         deaths = Column(Integer)
         recovered = Column(Integer)
@@ -60,6 +61,7 @@ def main():
         d = Data(infected=int(item["infizierte"]) if item["infizierte"] != "" else 0,
                  deaths=int(item["todesfaelle"]) if item["todesfaelle"] != "" else 0,
                  recovered=int(item["geheilte"]) if item["geheilte"] != "" else 0,
+                 title=item["title"],
                  date=try_parsing_date(item["datum"]),
                  source_1=item["quelle_1"], source_2=item["quelle_2"])
         if item["location"]:
