@@ -11,7 +11,11 @@ function render(entries)
 {
     for(var i = 0; i < entries.length; i++) {
         var entry = entries[i];
-    
+
+        var sources = "";
+        for(var j = 0; j < entry.sources.length; j++)
+            sources += "<a href=\"" + entry.sources[j] + "\">[" + j + "]</a>";
+
         var radius = Math.sqrt(entry.sick * 8e6 / Math.PI);
         L.circle([entry.lat, entry.lng], {radius: radius, color: 'red', fillOpacity: 0.7})
             .addTo(mymap)
@@ -19,11 +23,12 @@ function render(entries)
                 "<br />Infiziert: " + entry.sick +
                 "<br />Geheilt: " + entry.cured +
                 "<br />Todesfälle: " + entry.deaths +
-                "<br />Stand: " + entry.updated
+                "<br />Stand: " + entry.updated +
+                "<br />Quelle(n): " + sources
             );
     }
 }
 
-fetch('data.json')
+fetch('data.json', {cache: "no-cache"})
     .then(res => res.json())
     .then(data => render(data));

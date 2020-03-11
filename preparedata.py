@@ -20,7 +20,6 @@ for entry in data["data_db"]["objects"]:
 
 	loc = entry["location"]
 	if type(loc) != dict:
-		print(loc)
 		continue
 
 	bavariaData.append({
@@ -29,6 +28,7 @@ for entry in data["data_db"]["objects"]:
 		"cured": entry["geheilte"] or "0",
 		"deaths": entry["todesfaelle"] or "0",
 		"updated": try_parsing_date(entry["datum"]).strftime("%d.%m.%Y %H:%M"),
+		"sources": [entry["quelle_1"]],
 		"lat": loc["lat"],
 		"lng": loc["lng"],
 	})
