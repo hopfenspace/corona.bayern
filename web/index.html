@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="index, nofollow" />
+        <meta name="description" content="Ausbreitung des SARS-CoV-2 in Bayern in einer interaktiven Karte dargestellt." />
+
+        <title>Corona in Bayern</title>
+        
+        <meta property="og:title" content="Corona in Bayern" />
+        <meta property="og:description" content="Ausbreitung des SARS-CoV-2 in Bayern in einer interaktiven Karte dargestellt." />
+        <meta property="og:site_name" content="corona.bayern" />
+        <meta property="og:locale" content="de_DE" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://corona.bayern" />
+		<meta property="og:image" content="https://corona.bayern/assets/bayern-corona.png" />
+		<meta property="og:image:secure_url" content="https://corona.bayern/assets/bayern-corona.png" />
+        <meta property="og:image:width" content="512" />
+        <meta property="og:image:height" content="512" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:image" content="https://corona.bayern/assets/bayern-corona.png" />
+        <meta property="twitter:title" content="Corona in Bayern" />
+
+        <link rel="stylesheet" href="assets/leaflet.css" />
+
+        <style>
+            #ad {
+                position: absolute;
+                background-color: white;
+                text-align: center;
+                left: 3px;
+                bottom: 3px;
+                padding-left: 12px;
+                z-index: 99999;
+            }
+        </style>
+    </head>
+    <body>
+
+        <noscript>Bitte aktivieren sie Javascript um diese Seite anzusehen.</noscript>
+
+        <div id="coronamap" style="height: 100%; width: 100%;"></div>
+
+        <div id="ad">
+            <a href="https://hopfenspace.org">
+                <img width="100" src="assets/hopfenspace.svg" />
+            </a>
+        </div>
+
+        <script src="assets/leaflet.js"></script>
+        <script src="assets/script.js"></script>
+    </body>
+</html>
+

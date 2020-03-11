@@ -33,5 +33,5 @@ for entry in data["data_db"]["objects"]:
 		"lng": loc["lng"],
 	})
 
-with open("data.json", "w+") as fd:
+with open("web/data.json", "w+") as fd:
 	json.dump(bavariaData, fd, indent=4)
