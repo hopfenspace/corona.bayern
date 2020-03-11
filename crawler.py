@@ -50,6 +50,7 @@ def main():
         lat = Column(Float)
         lng = Column(Float)
 
+    base.metadata.create_all(engine)
     session_builder = sessionmaker(bind=engine)
     session = session_builder()
 
