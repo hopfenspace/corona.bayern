@@ -1,6 +1,16 @@
 import re, json, demjson, urllib.request
 
-with open("counties-bavaria.json", "r") as fd:
+# you can obtain the county-centres-bavaria.json file by running the following
+#  query on overpass-turbo.eu and export the result as GeoJSON
+'''
+(area["ISO3166-2"="DE-BY"];)->.bayern;
+rel["boundary"="administrative"]["admin_level"="6"](area.bayern)->.landkreise;
+node(r.landkreise);
+out;
+.landkreise out;
+'''
+
+with open("county-centres-bavaria.json", "r") as fd:
     counties = json.load(fd)
 
 url = "https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm"
@@ -14,17 +24,19 @@ data = demjson.decode(data)
 
 bavariaData = []
 
-for county in counties["features"]:
-    props = county["properties"]
-    dataKey =  "lkr_" + props["de:amtlicher_gemeindeschluessel"][2 :]
+for centre in counties["features"]:
+    props = centre["properties"]
+
+    countyTags = props["@relations"][0]["reltags"]
+    dataKey =  "lkr_" + countyTags["de:amtlicher_gemeindeschluessel"][2 : 5]
     if dataKey in data:
         sick = data[dataKey]["value"]
     else:
         sick = 0
 
-    pos = county["geometry"]["coordinates"]
+    pos = centre["geometry"]["coordinates"]
     bavariaData.append({
-        "name": props["name"],
+        "name": countyTags["name"],
 		"sick": sick,
 		"cured": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
 		"deaths": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
