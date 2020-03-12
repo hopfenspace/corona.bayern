@@ -1,10 +1,17 @@
-var mymap = L.map('coronamap').setView([48.834, 11.245], 8);
+var mymap = L.map('coronamap', {
+    minZoom: 7,
+    maxZoom: 12,
+    maxBounds: [
+        [50.608, 8.701],
+        [47.223, 14.150],
+    ],
+}).setView([48.834, 11.245], 8);
 
-L.tileLayer('https://a.tile.openstreetmap.de/{z}/{x}/{y}.png ', {
+L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ', {
+    subdomains: 'abc',
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
         + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
         + 'Kontakt: info@corona.bayern',
-    maxZoom: 18,
 }).addTo(mymap);
 
 function render(data)
