@@ -24,13 +24,13 @@
         <link rel="stylesheet" href="assets/leaflet.css" />
 
         <style>
-            #ad {
+            #info {
                 position: absolute;
                 background-color: white;
                 text-align: center;
-                left: 3px;
-                bottom: 3px;
-                padding-left: 12px;
+                font-size: small;
+                left: 2px;
+                bottom: 2px;
                 z-index: 99999;
             }
         </style>
@@ -41,10 +41,13 @@
 
         <div id="coronamap" style="height: 100%; width: 100%;"></div>
 
-        <div id="ad">
-            <a href="https://hopfenspace.org">
-                <img width="100" src="assets/hopfenspace.svg" />
-            </a>
+        <div id="info">
+            Stand: <br />
+            <span id="timestamp">...</span><br />
+            <a id="source" href="#">Quelle</a><br />
+            <br />
+            Ein Projekt des<br />
+            <a href="https://hopfenspace.org">Hackerspace<br />Pfaffenhofen</a>
         </div>
 
         <script src="assets/leaflet.js"></script>

@@ -7,24 +7,31 @@ L.tileLayer('https://a.tile.openstreetmap.de/{z}/{x}/{y}.png ', {
     maxZoom: 18,
 }).addTo(mymap);
 
-function render(entries)
+function render(data)
 {
-    for(var i = 0; i < entries.length; i++) {
-        var entry = entries[i];
+    document.getElementById("timestamp").innerText = data.timestamp;
+    document.getElementById("source").href = data.source;
 
-        var sources = "";
-        for(var j = 0; j < entry.sources.length; j++)
-            sources += "<a href=\"" + entry.sources[j] + "\">[" + j + "]</a>";
+    for(var i = 0; i < data.entries.length; i++) {
+        var entry = data.entries[i];
 
-        var radius = Math.sqrt(entry.sick * 8e6 / Math.PI);
-        L.circle([entry.lat, entry.lng], {radius: radius, color: 'red', fillOpacity: 0.7})
+        if(entry.sick == 0)
+        {
+            var color = "#0180b2";
+            var radius = 2000;
+        }
+        else
+        {
+            var color = "red";
+            var radius = Math.sqrt(entry.sick * 8e6 / Math.PI);
+        }
+
+        L.circle([entry.lat, entry.lng], {radius: radius, color: color, fillOpacity: 0.7})
             .addTo(mymap)
             .bindPopup("<b>" + entry.name + "</b>" +
                 "<br />Infiziert: " + entry.sick +
                 "<br />Geheilt: " + entry.cured +
-                "<br />Todesfälle: " + entry.deaths +
-                "<br />Stand: " + entry.updated +
-                "<br />Quelle(n): " + sources
+                "<br />Todesfälle: " + entry.deaths
             );
     }
 }

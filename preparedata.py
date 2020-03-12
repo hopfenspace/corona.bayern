@@ -1,37 +1,42 @@
-import re, json, datetime, urllib.request
+import re, json, demjson, urllib.request
 
-def try_parsing_date(text):
-    for fmt in ('Stand: %d.%m.%Y, %H:%M Uhr', 'Stand: %H:%M Uhr, %d.%m.%Y ', 'Stand: %H:%M Uhr, %d.%m.%Y'):
-        try:
-            return datetime.datetime.strptime(text, fmt)
-        except ValueError:
-            pass
-    raise ValueError('no valid date format found')
+with open("counties-bavaria.json", "r") as fd:
+    counties = json.load(fd)
 
-data = urllib.request.urlopen("https://coronamaps.de/covid-19-coronavirus-live-karte-bayern/").read().decode("utf-8")
-data = re.search("var mapsvg_options = (.*?);jQuery", data, re.UNICODE)
-data = json.loads(data.group(1))
+url = "https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm"
+htmlSrc = urllib.request.urlopen(url).read().decode("utf-8")
+
+timestamp = re.search("Stand: (.*?) Uhr", htmlSrc).group(1)
+
+data = re.search("areas\s*:\s*(\\{.*?\\})\\);", htmlSrc.replace("\r\n", ""), re.UNICODE)
+data = data.group(1)[ : -1]
+data = demjson.decode(data)
 
 bavariaData = []
 
-for entry in data["data_db"]["objects"]:
-	if entry["regions"][0]["id"] != "DE-BY":
-		continue
+for county in counties["features"]:
+    props = county["properties"]
+    dataKey =  "lkr_" + props["de:amtlicher_gemeindeschluessel"][2 :]
+    if dataKey in data:
+        sick = data[dataKey]["value"]
+    else:
+        sick = 0
 
-	loc = entry["location"]
-	if type(loc) != dict:
-		continue
+    pos = county["geometry"]["coordinates"]
+    bavariaData.append({
+        "name": props["name"],
+		"sick": sick,
+		"cured": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
+		"deaths": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
+		"lng": pos[0],
+		"lat": pos[1],
+    })
 
-	bavariaData.append({
-		"name": entry["title"],
-		"sick": entry["infizierte"] or "0",
-		"cured": entry["geheilte"] or "0",
-		"deaths": entry["todesfaelle"] or "0",
-		"updated": try_parsing_date(entry["datum"]).strftime("%d.%m.%Y %H:%M"),
-		"sources": [entry["quelle_1"]],
-		"lat": loc["lat"],
-		"lng": loc["lng"],
-	})
+bavariaData = {
+    "source": url,
+    "timestamp": timestamp,
+    "entries": bavariaData,
+}
 
 with open("web/data.json", "w+") as fd:
 	json.dump(bavariaData, fd, indent=4)
