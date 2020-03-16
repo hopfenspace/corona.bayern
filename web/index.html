@@ -33,6 +33,16 @@
                 bottom: 2px;
                 z-index: 99999;
             }
+
+            #sum-container {
+                position: absolute;
+                background-color: white;
+                text-align: center;
+                font-size: xx-large;
+                top: 2px;
+                right: 2px;
+                z-index: 99999;
+            }
         </style>
     </head>
     <body>
@@ -49,6 +59,8 @@
             Ein Projekt des<br />
             <a href="https://hopfenspace.org">Hackerspace<br />Pfaffenhofen</a>
         </div>
+
+        <div id="sum-container">Summe: <span id="sickSum">...</span></div>
 
         <script src="assets/leaflet.js"></script>
         <script src="assets/script.js"></script>

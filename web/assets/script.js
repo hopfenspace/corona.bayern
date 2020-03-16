@@ -18,6 +18,7 @@ function render(data)
 {
     document.getElementById("timestamp").innerText = data.timestamp;
     document.getElementById("source").href = data.source;
+    document.getElementById("sickSum").innerText = data.sickSum;
 
     for(var i = 0; i < data.entries.length; i++) {
         var entry = data.entries[i];

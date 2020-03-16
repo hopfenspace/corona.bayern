@@ -18,35 +18,41 @@ htmlSrc = urllib.request.urlopen(url).read().decode("utf-8")
 
 timestamp = re.search("Stand: (.*?) Uhr", htmlSrc).group(1)
 
-data = re.search("areas\s*:\s*(\\{.*?\\})\\);", htmlSrc.replace("\r\n", ""), re.UNICODE)
+data = re.search("areas\\s*:\\s*(\\{.*?\\})\\);", htmlSrc.replace("\r\n", ""), re.UNICODE)
 data = data.group(1)[ : -1]
 data = demjson.decode(data)
 
 bavariaData = []
+sickSum = 0
 
 for centre in counties["features"]:
     props = centre["properties"]
 
-    countyTags = props["@relations"][0]["reltags"]
-    dataKey =  "lkr_" + countyTags["de:amtlicher_gemeindeschluessel"][2 : 5]
-    if dataKey in data:
-        sick = data[dataKey]["value"]
-    else:
-        sick = 0
+    sick = 0
+    names = []
+
+    for county in props["@relations"]:
+        dataKey =  "lkr_" + county["reltags"]["de:amtlicher_gemeindeschluessel"][2 : 5]
+        names.append(county["reltags"]["name"])
+        if dataKey in data:
+            sick += data[dataKey]["value"]
+
+    sickSum += sick
 
     pos = centre["geometry"]["coordinates"]
     bavariaData.append({
-        "name": countyTags["name"],
-		"sick": sick,
-		"cured": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
-		"deaths": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
-		"lng": pos[0],
-		"lat": pos[1],
+        "name": " & ".join(names),
+        "sick": sick,
+        "cured": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
+        "deaths": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
+        "lng": pos[0],
+        "lat": pos[1],
     })
 
 bavariaData = {
     "source": url,
     "timestamp": timestamp,
+    "sickSum": sickSum,
     "entries": bavariaData,
 }
 
