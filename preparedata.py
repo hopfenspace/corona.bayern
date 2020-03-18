@@ -43,8 +43,6 @@ for centre in counties["features"]:
     bavariaData.append({
         "name": " & ".join(names),
         "sick": sick,
-        "cured": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
-        "deaths": 0, # TODO, currently 0 in bavaria, will lgl.bayern.de provide this?
         "lng": pos[0],
         "lat": pos[1],
     })
