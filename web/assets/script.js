@@ -20,6 +20,8 @@ function render(data)
     document.getElementById("source").href = data.source;
     document.getElementById("sickSum").innerText = data.sickSum;
 
+    data.entries.sort((a, b) => b.sick - a.sick);
+
     for(var i = 0; i < data.entries.length; i++) {
         var entry = data.entries[i];
 
