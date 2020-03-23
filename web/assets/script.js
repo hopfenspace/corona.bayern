@@ -37,9 +37,15 @@ function render(data)
             var radius = Math.sqrt(entry.sick * 1e6 / Math.PI);
         }
 
+        var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
+        var text = "<b>" + entry.name + "</b>"
+            + "<br />Infiziert: " + entry.sick
+            + "<br />Tote: " + entry.deaths
+            + "<br />Durchseuchung: " + percent + "%";
+
         L.circle([entry.lat, entry.lng], {radius: radius, color: color, fillOpacity: 0.7})
             .addTo(mymap)
-            .bindTooltip("<b>" + entry.name + "</b><br />Infiziert: " + entry.sick, {sticky: true, direction: "top"});
+            .bindTooltip(text, {sticky: true, direction: "top"});
     }
 }
 
