@@ -16,9 +16,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ', {
 
 function render(data)
 {
-    document.getElementById("timestamp").innerText = data.timestamp;
-    document.getElementById("source").href = data.source;
     document.getElementById("sickSum").innerText = data.sickSum;
+    document.getElementById("deathSum").innerText = data.deathSum;
 
     data.entries.sort((a, b) => b.sick - a.sick);
 
@@ -36,9 +35,13 @@ function render(data)
             var radius = Math.sqrt(entry.sick * 3e6 / Math.PI);
         }
 
+        var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
         L.circle([entry.lat, entry.lng], {radius: radius, color: color, fillOpacity: 0.7})
             .addTo(mymap)
-            .bindPopup("<b>" + entry.name + "</b><br />Infiziert: " + entry.sick);
+            .bindPopup("<b>" + entry.name + "</b>"
+                + "<br />Infiziert: " + entry.sick
+                + "<br />Tote: " + entry.deaths
+                + "<br />Durchseuchung: " + percent + "%");
     }
 }
 

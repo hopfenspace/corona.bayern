@@ -58,9 +58,7 @@
         <div id="coronamap" style="height: 100%; width: 100%;"></div>
 
         <div id="info">
-            Stand: <br />
-            <span id="timestamp">...</span><br />
-            <a id="source" href="#">Quelle</a><br />
+            <a href="https://services7.arcgis.com/mOBPykOjAyBO2ZKk/ArcGIS/rest/services/RKI_Landkreisdaten/FeatureServer">Quelle: RKI</a><br />
             <br />
             Ein Projekt des<br />
             <a href="https://hopfenspace.org">
@@ -68,7 +66,10 @@
             </a>
         </div>
 
-        <div id="sum-container">Summe: <span id="sickSum">...</span></div>
+        <div id="sum-container">
+            Summe: <span id="sickSum">...</span><br />
+            Tote: <span id="deathSum">...</span>
+        </div>
 
         <script src="assets/leaflet.js"></script>
         <script src="assets/script.js"></script>

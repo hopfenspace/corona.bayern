@@ -13,44 +13,53 @@ out;
 with open("county-centres-bavaria.json", "r") as fd:
     counties = json.load(fd)
 
-url = "https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm"
+url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=BL_ID%3D9&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&returnZ=false&returnM=false&returnExceededLimitFeatures=true&sqlFormat=none&f=pjson"
 htmlSrc = urllib.request.urlopen(url).read().decode("utf-8")
+data = {}
+for entry in json.loads(htmlSrc)["features"]:
+    entry = entry["attributes"]
+    key = entry["RS"]
+    data[key] = entry
 
-timestamp = re.search("Stand: (.*?) Uhr", htmlSrc).group(1)
-
-data = re.search("areas\\s*:\\s*(\\{.*?\\})\\);", htmlSrc.replace("\r\n", ""), re.UNICODE)
-data = data.group(1)[ : -1]
-data = demjson.decode(data)
 
 bavariaData = []
 sickSum = 0
+deathSum = 0
 
 for centre in counties["features"]:
     props = centre["properties"]
 
+    people = 0
     sick = 0
+    deaths = 0
     names = []
 
     for county in props["@relations"]:
-        dataKey =  "lkr_" + county["reltags"]["de:amtlicher_gemeindeschluessel"][2 : 5]
+        key = county["reltags"]["de:amtlicher_gemeindeschluessel"][0 : 5]
         names.append(county["reltags"]["name"])
-        if dataKey in data:
-            sick += data[dataKey]["value"]
+        if key in data:
+            people += data[key]["EWZ"]
+            sick += data[key]["cases"]
+            deaths += data[key]["deaths"]
+
+        del data[key]
 
     sickSum += sick
+    deathSum += deaths
 
     pos = centre["geometry"]["coordinates"]
     bavariaData.append({
         "name": " & ".join(names),
+        "people": people,
         "sick": sick,
+        "deaths": deaths,
         "lng": pos[0],
         "lat": pos[1],
     })
 
 bavariaData = {
-    "source": url,
-    "timestamp": timestamp,
     "sickSum": sickSum,
+    "deathSum": deathSum,
     "entries": bavariaData,
 }
 
