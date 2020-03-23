@@ -19,6 +19,7 @@ function render(data)
     document.getElementById("timestamp").innerText = data.timestamp;
     document.getElementById("source").href = data.source;
     document.getElementById("sickSum").innerText = data.sickSum;
+    document.getElementById("deathSum").innerText = data.deathSum;
 
     data.entries.sort((a, b) => b.sick - a.sick);
 
