@@ -10,7 +10,7 @@ out;
 .landkreise out;
 '''
 
-with open("county-centres-bavaria.json", "r") as fd:
+with open("county-centres-bavaria.json", "r", encoding="utf-8") as fd:
     counties = json.load(fd)
 
 url = "https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm"
@@ -57,7 +57,7 @@ bavariaData = {
 }
 
 timestamp = dateutil.parser.parse(timestamp).isoformat()
-with open("web/history/{}.json".format(timestamp), "w+") as fd:
+with open("web/history/{}.json".format(timestamp), "w+", encoding="utf-8") as fd:
     json.dump(bavariaData, fd, indent=4)
 
 os.unlink("web/data.json")
