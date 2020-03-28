@@ -29,12 +29,12 @@ function render(data)
         if(entry.sick == 0)
         {
             var color = "#0180b2";
-            var radius = Math.sqrt(1 * 3e6 / Math.PI);;
+            var radius = Math.sqrt(3 * 1e6 / Math.PI);;
         }
         else
         {
             var color = "red";
-            var radius = Math.sqrt(entry.sick * 3e6 / Math.PI);
+            var radius = Math.sqrt(entry.sick * 1e6 / Math.PI);
         }
 
         L.circle([entry.lat, entry.lng], {radius: radius, color: color, fillOpacity: 0.7})
