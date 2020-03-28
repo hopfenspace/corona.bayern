@@ -17,7 +17,7 @@ url = "https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheit
 htmlSrc = urllib.request.urlopen(url).read().decode("utf-8")
 
 timestamp = re.search("Stand: (.*?) Uhr", htmlSrc).group(1)
-deathSum = re.search("<td>(.*?)<br></td>\\s*</tr>\\s*</tbody>", htmlSrc).group(1)
+deathSum = re.search("<td>(.*?)(<br>)?</td>\\s*</tr>\\s*</tbody>", htmlSrc).group(1)
 
 data = re.search("areas\\s*:\\s*(\\{.*?\\})\\);", htmlSrc.replace("\r\n", ""), re.UNICODE)
 data = data.group(1)[ : -1]
