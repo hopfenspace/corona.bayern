@@ -18,7 +18,7 @@ htmlSrc = urllib.request.urlopen(url).read().decode("utf-8")
 allData = json.loads(htmlSrc)["features"]
 
 source = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/ArcGIS/rest/services/RKI_Landkreisdaten/FeatureServer"
-timestamp = allData[0]["attributes"]["last_update"]
+timestamp = allData[0]["attributes"]["last_update"].replace("Uhr", "").strip()
 
 data = {}
 for entry in allData:
