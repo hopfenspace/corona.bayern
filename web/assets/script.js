@@ -54,17 +54,20 @@ function render(data)
             .addTo(mymap)
             .bindTooltip(text, {sticky: true, direction: "top"});
 
-        text = "<b>" + entry.name + "</b>"
-            + "<br />Tote: " + entry.deaths;
-        L.semiCircle([entry.lat, entry.lng], {
-                radius: radius,
-                startAngle: 0,
-                stopAngle: angle,
-                color: 'black',
-                fillOpacity: 0.7
-            })
-            .addTo(mymap)
-            .bindTooltip(text, {sticky: true, direction: "top"});
+        if(entry.deaths > 0)
+        {
+            text = "<b>" + entry.name + "</b>"
+                + "<br />Tote: " + entry.deaths;
+            L.semiCircle([entry.lat, entry.lng], {
+                    radius: radius,
+                    startAngle: 0,
+                    stopAngle: angle,
+                    color: 'black',
+                    fillOpacity: 0.7
+                })
+                .addTo(mymap)
+                .bindTooltip(text, {sticky: true, direction: "top"});
+        }
     }
 }
 
