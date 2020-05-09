@@ -20,16 +20,24 @@ function render(data)
     document.getElementById("source").href = data.source;
     document.getElementById("sickSum").innerText = data.sickSum;
     document.getElementById("deathSum").innerText = data.deathSum;
+    var usePercent = document.location.search === "?percent";
 
     data.entries.sort((a, b) => b.sick - a.sick);
 
     for(var i = 0; i < data.entries.length; i++) {
         var entry = data.entries[i];
+        var angle = entry.deaths / (entry.sick + entry.deaths) * 360;
+        var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
 
         if(entry.sick == 0)
         {
             var color = "#0180b2";
             var radius = Math.sqrt(3 * 3e5 / Math.PI);
+        }
+        else if(usePercent)
+        {
+            var color = "#6600cc";
+            var radius = Math.sqrt(percent * 5e8 / Math.PI);
         }
         else
         {
@@ -37,13 +45,10 @@ function render(data)
             var radius = Math.sqrt(entry.sick * 3e5 / Math.PI);
         }
 
-        var angle = entry.deaths / (entry.sick + entry.deaths) * 360;
-        var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
         var text = "<b>" + entry.name + "</b>"
             + "<br />Infiziert: " + entry.sick
             + "<br />Tote: " + entry.deaths
             + "<br />Durchseuchung: " + percent + "%";
-
         L.semiCircle([entry.lat, entry.lng], {
                 radius: radius,
                 startAngle: angle,
