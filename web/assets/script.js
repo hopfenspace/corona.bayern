@@ -29,21 +29,40 @@ function render(data)
         if(entry.sick == 0)
         {
             var color = "#0180b2";
-            var radius = Math.sqrt(3 * 1e6 / Math.PI);;
+            var radius = Math.sqrt(3 * 3e5 / Math.PI);
         }
         else
         {
             var color = "red";
-            var radius = Math.sqrt(entry.sick * 1e6 / Math.PI);
+            var radius = Math.sqrt(entry.sick * 3e5 / Math.PI);
         }
 
+        var angle = entry.deaths / (entry.sick + entry.deaths) * 360;
         var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
         var text = "<b>" + entry.name + "</b>"
             + "<br />Infiziert: " + entry.sick
             + "<br />Tote: " + entry.deaths
             + "<br />Durchseuchung: " + percent + "%";
 
-        L.circle([entry.lat, entry.lng], {radius: radius, color: color, fillOpacity: 0.7})
+        L.semiCircle([entry.lat, entry.lng], {
+                radius: radius,
+                startAngle: angle,
+                stopAngle: 360,
+                color: color,
+                fillOpacity: 0.7
+            })
+            .addTo(mymap)
+            .bindTooltip(text, {sticky: true, direction: "top"});
+
+        text = "<b>" + entry.name + "</b>"
+            + "<br />Tote: " + entry.deaths;
+        L.semiCircle([entry.lat, entry.lng], {
+                radius: radius,
+                startAngle: 0,
+                stopAngle: angle,
+                color: 'black',
+                fillOpacity: 0.7
+            })
             .addTo(mymap)
             .bindTooltip(text, {sticky: true, direction: "top"});
     }
