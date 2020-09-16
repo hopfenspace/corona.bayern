@@ -2,6 +2,26 @@ var labels = [];
 var infected = [];
 var deaths = [];
 
+var params = {};
+document.location.search.slice(1).split("&").forEach(entry => {
+    var split = entry.split("=");
+    params[split[0]] = decodeURIComponent(split[1]);
+});
+var start = parseInt(params.start) || Date.now() - 14 * 24 * 60 * 60 * 1000;
+var end = parseInt(params.end) || Date.now();
+var linear = params.linear === "true";
+
+var startEl = document.getElementById("startDate");
+var endEl = document.getElementById("endDate");
+
+startEl.valueAsNumber = start;
+endEl.valueAsNumber = end;
+
+function loadNewRange()
+{
+    document.location.replace(`?linear=${linear}&start=${startEl.valueAsNumber}&end=${endEl.valueAsNumber}`);
+}
+
 function padString(s, len, pad)
 {
     s = String(s);
@@ -90,7 +110,7 @@ var chart = new Chart(canvas, {
                 },
             }],
             yAxes: [{
-                type: document.location.search === "?linear" ? 'linear' : 'logarithmic',
+                type: linear ? 'linear' : 'logarithmic',
                 ticks: {
                     beginAtZero: true
                 }
@@ -99,5 +119,5 @@ var chart = new Chart(canvas, {
     }
 });
 
-loadAllDays(new Date(2020, 2, 16), new Date())
+loadAllDays(new Date(start), new Date(end))
     .then(() => console.log('finished loading all days', labels, infected, deaths));

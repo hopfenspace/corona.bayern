@@ -20,7 +20,13 @@
 		<noscript>Bitte aktivieren sie Javascript um diese Seite anzusehen.</noscript>
 
         <a href="?">Logarithmisch</a>
-		<a href="?linear">Linear</a><br />
+		<a href="?linear=true">Linear</a>
+		<br />
+
+		<input type="date" id="startDate" />
+		<input type="date" id="endDate" />
+		<button onclick="loadNewRange()">Anzeigen</button>
+		<br />
 
 		<canvas></canvas>
 
