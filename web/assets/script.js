@@ -22,6 +22,7 @@ function render(data)
     document.getElementById("deathSum").innerText = data.deathSum;
     document.getElementById("deathRate").innerText = Math.round(data.deathSum * 10000 / data.sickSum) / 100;
     var usePercent = document.location.search === "?percent";
+    var useAbsolute = document.location.search === "?absolute";
 
     data.entries.sort((a, b) => b.sick - a.sick);
 
@@ -41,13 +42,27 @@ function render(data)
             var color = "#6600cc";
             var radius = Math.sqrt(percent * 5e8 / Math.PI);
         }
-        else
+        else if(useAbsolute)
         {
             var color = "red";
-            var radius = Math.sqrt(entry.sick * 3e5 / Math.PI);
+            var radius = Math.sqrt(entry.sick * 2e5 / Math.PI);
+        }
+        else // incidence
+        {
+            if(entry.incidence < 10)
+                color = "green";
+            else if(entry.incidence < 35)
+                color = "grey";
+            else if(entry.incidence < 50)
+                color = "orange";
+            else
+                color = "red";
+
+            radius = Math.sqrt(entry.incidence * 3e6 / Math.PI);
         }
 
         var text = "<b>" + entry.name + "</b>"
+            + "<br />Inzidenzzahl: " + entry.incidence
             + "<br />Infiziert: " + entry.sick
             + "<br />Tote: " + entry.deaths
             + "<br />Durchseuchung: " + percent + "%"

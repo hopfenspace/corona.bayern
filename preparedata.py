@@ -36,6 +36,7 @@ for centre in counties["features"]:
     people = 0
     sick = 0
     deaths = 0
+    incidence = 0
     names = []
 
     for county in props["@relations"]:
@@ -46,6 +47,9 @@ for centre in counties["features"]:
             sick += data[key]["cases"]
             deaths += data[key]["deaths"]
 
+            if data[key]["cases7_per_100k"] > incidence:
+                incidence = data[key]["cases7_per_100k"]
+
         del data[key]
 
     sickSum += sick
@@ -54,6 +58,7 @@ for centre in counties["features"]:
     pos = centre["geometry"]["coordinates"]
     bavariaData.append({
         "name": " & ".join(names),
+        "incidence": incidence,
         "people": people,
         "sick": sick,
         "deaths": deaths,
