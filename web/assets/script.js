@@ -31,6 +31,7 @@ function render(data)
         var angle = entry.deaths / entry.sick * 360;
         var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
         var deathRate = Math.round(entry.deaths * 10000 / entry.sick) / 100;
+        var incidence = Math.round(entry.incidence * 100) / 100;
 
         if(entry.sick == 0)
         {
@@ -62,7 +63,7 @@ function render(data)
         }
 
         var text = "<b>" + entry.name + "</b>"
-            + "<br />Inzidenzzahl: " + entry.incidence
+            + "<br />Inzidenzzahl: " + incidence
             + "<br />Infiziert: " + entry.sick
             + "<br />Tote: " + entry.deaths
             + "<br />Durchseuchung: " + percent + "%"
