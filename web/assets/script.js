@@ -50,14 +50,14 @@ function render(data)
         }
         else // incidence
         {
-            if(entry.incidence < 10)
+            if(entry.incidence <= 35)
                 color = "green";
-            else if(entry.incidence < 35)
-                color = "grey";
-            else if(entry.incidence < 50)
+            else if(entry.incidence <= 50)
                 color = "orange";
-            else
+            else if(entry.incidence <= 100)
                 color = "red";
+            else
+                color = "darkred";
 
             radius = Math.sqrt(entry.incidence * 3e6 / Math.PI);
         }
