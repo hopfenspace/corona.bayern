@@ -1,9 +1,9 @@
 var mymap = L.map('coronamap', {
-    minZoom: 7,
+    minZoom: 6,
     maxZoom: 12,
     maxBounds: [
-        [50.608, 8.701],
-        [47.223, 14.150],
+        [51, 8],
+        [46, 15.5],
     ],
 }).setView([48.834, 11.245], 8);
 
