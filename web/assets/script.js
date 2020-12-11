@@ -56,10 +56,12 @@ function render(data)
                 color = "orange";
             else if(entry.incidence <= 100)
                 color = "red";
-            else
+            else if(entry.incidence <= 200)
                 color = "darkred";
+            else
+                color = "purple";
 
-            radius = Math.sqrt(entry.incidence * 3e6 / Math.PI);
+            radius = Math.sqrt(entry.incidence * 2e6 / Math.PI);
         }
 
         var text = "<b>" + entry.name + "</b>"
