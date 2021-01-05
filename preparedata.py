@@ -10,7 +10,21 @@ out;
 .landkreise out;
 '''
 
-with open("county-centres-bavaria.json", "r", encoding="utf-8") as fd:
+# you can obtain the county-boundaries-bavaria.json file by running the following
+#  query on overpass-turbo.eu and export the result as GeoJSON and simplify using
+#  mapshaper.org
+'''
+area(3602145268);
+rel
+  [admin_level~"6"]
+  (area);
+out body;
+>;
+out skel qt;
+'''
+
+
+with open("county-polygons-bavaria.json", "r", encoding="utf-8") as fd:
     counties = json.load(fd)
 
 url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=BL_ID%3D9&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&returnZ=false&returnM=false&returnExceededLimitFeatures=true&sqlFormat=none&f=json"
@@ -30,40 +44,27 @@ bavariaData = []
 sickSum = 0
 deathSum = 0
 
-for centre in counties["features"]:
-    props = centre["properties"]
+for county in counties["features"]:
+    props = county["properties"]
+    key = props["de:amtlicher_gemeindeschluessel"]
+    dataKey = key[0 : 5]
 
-    people = 0
-    sick = 0
-    deaths = 0
-    incidence = 0
-    names = []
-
-    for county in props["@relations"]:
-        key = county["reltags"]["de:amtlicher_gemeindeschluessel"][0 : 5]
-        names.append(county["reltags"]["name"])
-        if key in data:
-            people += data[key]["EWZ"]
-            sick += data[key]["cases"]
-            deaths += data[key]["deaths"]
-
-            if data[key]["cases7_per_100k"] > incidence:
-                incidence = data[key]["cases7_per_100k"]
-
-        del data[key]
+    name = props["name"]
+    people = data[dataKey]["EWZ"]
+    sick = data[dataKey]["cases"]
+    deaths = data[dataKey]["deaths"]
+    incidence = data[dataKey]["cases7_per_100k"]
 
     sickSum += sick
     deathSum += deaths
 
-    pos = centre["geometry"]["coordinates"]
     bavariaData.append({
-        "name": " & ".join(names),
+        "key": key,
+        "name": name,
         "incidence": incidence,
         "people": people,
         "sick": sick,
         "deaths": deaths,
-        "lng": pos[0],
-        "lat": pos[1],
     })
 
 bavariaData = {

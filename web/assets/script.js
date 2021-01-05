@@ -14,7 +14,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png ', {
         + 'Kontakt: info@corona.bayern',
 }).addTo(mymap);
 
-function render(data)
+function render(data, counties)
 {
     document.getElementById("timestamp").innerText = data.timestamp;
     document.getElementById("source").href = data.source;
@@ -22,31 +22,65 @@ function render(data)
     document.getElementById("deathSum").innerText = data.deathSum;
     document.getElementById("deathRate").innerText = Math.round(data.deathSum * 10000 / data.sickSum) / 100;
     var usePercent = document.location.search === "?percent";
-    var useAbsolute = document.location.search === "?absolute";
 
     data.entries.sort((a, b) => b.sick - a.sick);
 
-    for(var i = 0; i < data.entries.length; i++) {
+    var maxEntry = 0;
+    var minEntry = Number.MAX_SAFE_INTEGER;
+    if(usePercent)
+    {
+        data.entries.forEach(entry => {
+            var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
+            if(percent > maxEntry)
+                maxEntry = percent;
+            if(percent < minEntry)
+                minEntry = percent;
+        });
+    }
+
+    for(var i = 0; i < data.entries.length; i++)
+    {
         var entry = data.entries[i];
-        var angle = entry.deaths / entry.sick * 360;
         var percent = Math.round(entry.sick * 10000 / entry.people) / 100;
         var deathRate = Math.round(entry.deaths * 10000 / entry.sick) / 100;
         var incidence = Math.round(entry.incidence * 100) / 100;
 
+        var county = counties.features.find(x => x.properties["de:amtlicher_gemeindeschluessel"] === entry.key);
+        if(!county)
+        {
+            console.error("could not find polygon for ", entry, county);
+            continue;
+        }
+
+        var coordinates = [];
+        if(county.geometry.type === "MultiPolygon")
+        {
+            county.geometry.coordinates.map(x => coordinates.push(x[0]));
+        }
+        else if(county.geometry.type === "Polygon")
+        {
+            coordinates.push(county.geometry.coordinates[0]);
+        }
+        else
+        {
+            console.error("unknown geometry shape ", county);
+            continue;
+        }
+
+        coordinates = coordinates.map(x => x.map(([lon, lat]) => [lat, lon]));
+
+        console.log(entry.name, county.geometry.type, coordinates);
+
+        var color;
+        var fillOpacity = 0.3;
         if(entry.sick == 0)
         {
-            var color = "#0180b2";
-            var radius = Math.sqrt(3 * 3e5 / Math.PI);
+            color = "#0180b2";
         }
         else if(usePercent)
         {
-            var color = "#6600cc";
-            var radius = Math.sqrt(percent * 5e8 / Math.PI);
-        }
-        else if(useAbsolute)
-        {
-            var color = "red";
-            var radius = Math.sqrt(entry.sick * 2e5 / Math.PI);
+            color = "red";
+            fillOpacity = 0.1 + (percent - minEntry) / (maxEntry - minEntry) * 0.9;
         }
         else // incidence
         {
@@ -60,8 +94,6 @@ function render(data)
                 color = "darkred";
             else
                 color = "purple";
-
-            radius = Math.sqrt(entry.incidence * 2e6 / Math.PI);
         }
 
         var text = "<b>" + entry.name + "</b>"
@@ -70,33 +102,18 @@ function render(data)
             + "<br />Tote: " + entry.deaths
             + "<br />Durchseuchung: " + percent + "%"
             + "<br />Sterberate: " + deathRate + "%";
-        L.semiCircle([entry.lat, entry.lng], {
-                radius: radius,
-                startAngle: angle,
-                stopAngle: 360,
-                color: color,
-                fillOpacity: 0.7
-            })
-            .addTo(mymap)
-            .bindTooltip(text, {sticky: true, direction: "top"});
-
-        if(entry.deaths > 0)
-        {
-            text = "<b>" + entry.name + "</b>"
-                + "<br />Tote: " + entry.deaths;
-            L.semiCircle([entry.lat, entry.lng], {
-                    radius: radius,
-                    startAngle: 0,
-                    stopAngle: angle,
-                    color: 'black',
-                    fillOpacity: 0.7
-                })
+        coordinates.forEach(poly => {
+            L.polygon(poly, { color, fillOpacity })
                 .addTo(mymap)
                 .bindTooltip(text, {sticky: true, direction: "top"});
-        }
+        });
     }
 }
 
-fetch('data.json', {cache: "no-cache"})
-    .then(res => res.json())
-    .then(data => render(data));
+Promise.all([
+    fetch('county-polygons.json')
+        .then(res => res.json()),
+    fetch('data.json', {cache: "no-cache"})
+        .then(res => res.json())
+])
+    .then(([counties, data]) => render(data, counties))
