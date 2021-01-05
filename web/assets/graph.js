@@ -7,7 +7,7 @@ document.location.search.slice(1).split("&").forEach(entry => {
     var split = entry.split("=");
     params[split[0]] = decodeURIComponent(split[1]);
 });
-var start = parseInt(params.start) || Date.now() - 14 * 24 * 60 * 60 * 1000;
+var start = parseInt(params.start) || Date.now() - 30 * 24 * 60 * 60 * 1000;
 var end = parseInt(params.end) || Date.now();
 var linear = params.linear === "true";
 
