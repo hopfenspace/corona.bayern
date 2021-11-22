@@ -92,8 +92,11 @@ function render(data, counties)
                 color = "red";
             else if(entry.incidence <= 200)
                 color = "darkred";
-            else
+            else if(entry.incidence <= 1000)
                 color = "purple";
+            else
+                color = "black";
+                fillOpacity = 0.6
         }
 
         var text = "<b>" + entry.name + "</b>"
