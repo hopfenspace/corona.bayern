@@ -32,6 +32,15 @@
                 left: 2px;
                 bottom: 2px;
                 z-index: 99999;
+				display: flex;
+            }
+		
+			.info-col {
+                padding: 5px;
+            }
+
+            .info-col:last-child {
+                padding-left: 20px;
             }
 
             #hopfenspace-img {
@@ -58,14 +67,26 @@
         <div id="coronamap" style="height: 100%; width: 100%;"></div>
 
         <div id="info">
-            Stand: <br />
-            <span id="timestamp">...</span><br />
-            <a id="source" href="#">Quelle</a><br />
-            <br />
-            Ein Projekt des<br />
-            <a href="https://hopfenspace.org">
-                <img src="assets/hopfenspace.svg" id="hopfenspace-img" />
-            </a>
+			<div class="info-col">
+				Stand: <br />
+				<span id="timestamp">...</span><br />
+				<a id="source" href="#">Quelle</a><br />
+				<br />
+				Ein Projekt des<br />
+				<a href="https://hopfenspace.org">
+					<img src="assets/hopfenspace.svg" id="hopfenspace-img" />
+				</a>
+			</div>
+			<div class="info-col">
+				<span style="color:green">⬤</span> &lt; 35<br>
+				<span style="color:yellow">⬤</span> 35 - 50<br>
+				<span style="color:orange">⬤</span> 50 - 100<br>
+				<span style="color:red">⬤</span> 100 - 200<br>
+				<span style="color:darkred">⬤</span> 200 - 500<br>
+				<span style="color:purple">⬤</span> 500 - 1000 <br>
+				<span style="color:#595959;">⬤</span> 1000 - 2000<br>
+				<span style="color:black">⬤</span> &gt; 2000<br>
+			</div>
         </div>
 
         <div id="sum-container">
