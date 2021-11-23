@@ -87,16 +87,21 @@ function render(data, counties)
             if(entry.incidence <= 35)
                 color = "green";
             else if(entry.incidence <= 50)
-                color = "orange";
+                color = "yellow";
             else if(entry.incidence <= 100)
-                color = "red";
+                color = "orange";
             else if(entry.incidence <= 200)
+                color = "red";
+            else if(entry.incidence <= 500)
                 color = "darkred";
             else if(entry.incidence <= 1000)
                 color = "purple";
-            else
+            else if(entry.incidence <= 2000)
                 color = "black";
                 fillOpacity = 0.6
+            else
+                color = "black";
+                fillOpacity = 0.8
         }
 
         var text = "<b>" + entry.name + "</b>"
