@@ -98,7 +98,7 @@ function render(data, counties)
                 color = "purple";
             else if(entry.incidence <= 2000)
                 color = "black";
-                fillOpacity = 0.6
+                fillOpacity = 0.5
             else
                 color = "black";
                 fillOpacity = 0.8
