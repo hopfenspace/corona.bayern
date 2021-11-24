@@ -1,8 +1,8 @@
 <html>
     <head>
         <meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="robots" content="index, nofollow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, nofollow" />
         <meta name="description" content="Ausbreitung des SARS-CoV-2 in Bayern in einer interaktiven Karte dargestellt." />
 
         <title>Corona in Bayern</title>
@@ -13,8 +13,8 @@
         <meta property="og:locale" content="de_DE" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://corona.bayern" />
-		<meta property="og:image" content="https://corona.bayern/assets/bayern-corona.png" />
-		<meta property="og:image:secure_url" content="https://corona.bayern/assets/bayern-corona.png" />
+        <meta property="og:image" content="https://corona.bayern/assets/bayern-corona.png" />
+        <meta property="og:image:secure_url" content="https://corona.bayern/assets/bayern-corona.png" />
         <meta property="og:image:width" content="512" />
         <meta property="og:image:height" content="512" />
         <meta property="twitter:card" content="summary_large_image" />
@@ -32,6 +32,23 @@
                 left: 2px;
                 bottom: 2px;
                 z-index: 99999;
+                display: flex;
+            }
+        
+            .info-col {
+                padding: 5px;
+            }
+
+            .info-col:last-child {
+                padding-left: 20px;
+            }
+            
+            .info-legend {
+                display: none;
+            }
+            
+            .info-legend-show {
+                display: block;
             }
 
             #hopfenspace-img {
@@ -58,14 +75,27 @@
         <div id="coronamap" style="height: 100%; width: 100%;"></div>
 
         <div id="info">
-            Stand: <br />
-            <span id="timestamp">...</span><br />
-            <a id="source" href="#">Quelle</a><br />
-            <br />
-            Ein Projekt des<br />
-            <a href="https://hopfenspace.org">
-                <img src="assets/hopfenspace.svg" id="hopfenspace-img" />
-            </a>
+            <div class="info-col">
+                Stand: <br />
+                <span id="timestamp">...</span><br />
+                <a id="source" href="#">Quelle</a><br />
+                <br />
+                Ein Projekt des<br />
+                <a href="https://hopfenspace.org">
+                    <img src="assets/hopfenspace.svg" id="hopfenspace-img" />
+                </a>
+                <button onclick="show_legend()">Zeige Legende</button>
+            </div>
+            <div class="info-col info-legend" id="info-legend">
+                <span style="color:green">⬤</span> &lt; 35<br>
+                <span style="color:yellow">⬤</span> 35 - 50<br>
+                <span style="color:orange">⬤</span> 50 - 100<br>
+                <span style="color:red">⬤</span> 100 - 200<br>
+                <span style="color:darkred">⬤</span> 200 - 500<br>
+                <span style="color:purple">⬤</span> 500 - 1000 <br>
+                <span style="color:#595959;">⬤</span> 1000 - 2000<br>
+                <span style="color:black">⬤</span> &gt; 2000<br>
+            </div>
         </div>
 
         <div id="sum-container">
@@ -82,4 +112,3 @@
         <script src="assets/script.js"></script>
     </body>
 </html>
-
