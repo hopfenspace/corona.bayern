@@ -96,12 +96,13 @@ function render(data, counties)
                 color = "darkred";
             else if(entry.incidence <= 1000)
                 color = "purple";
-            else if(entry.incidence <= 2000)
+            else if(entry.incidence <= 2000) {
                 color = "black";
-                fillOpacity = 0.5
-            else
+                fillOpacity = 0.5;
+            } else {
                 color = "black";
-                fillOpacity = 0.8
+                fillOpacity = 0.8;
+            }
         }
 
         var text = "<b>" + entry.name + "</b>"
@@ -125,3 +126,8 @@ Promise.all([
         .then(res => res.json())
 ])
     .then(([counties, data]) => render(data, counties))
+
+function show_legend(){
+    var element = document.getElementById("info-legend");
+    element.classList.toggle("info-legend-show");
+}
