@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os, re, json, demjson, datetime, urllib.request
 
 # you can obtain the county-centres-bavaria.json file by running the following
