@@ -42,9 +42,14 @@
             .info-col:last-child {
                 padding-left: 20px;
             }
+			
+			.info-col1 button {
+				margin: 5px 0;
+			}
             
             .info-legend {
                 display: none;
+				text-align: left;
             }
             
             .info-legend-show {
@@ -75,16 +80,17 @@
         <div id="coronamap" style="height: 100%; width: 100%;"></div>
 
         <div id="info">
-            <div class="info-col">
+            <div class="info-col info-col1">
                 Stand: <br />
                 <span id="timestamp">...</span><br />
-                <a id="source" href="#">Quelle</a><br />
+                <a id="source" href="#" target="_blank">Quelle</a><br />
+				<button onclick="show_legend()">Zeige Legende</button>
                 <br />
                 Ein Projekt des<br />
-                <a href="https://hopfenspace.org">
+                <a href="https://hopfenspace.org" target="_blank">
                     <img src="assets/hopfenspace.svg" id="hopfenspace-img" />
                 </a>
-                <button onclick="show_legend()">Zeige Legende</button>
+                
             </div>
             <div class="info-col info-legend" id="info-legend">
                 <span style="color:green">⬤</span> &lt; 35<br>
