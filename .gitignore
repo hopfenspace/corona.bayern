@@ -1,2 +1,4 @@
 *.json
-web/assets/leaflet.*
+web/assets/leaflet*
+web/assets/moment*
+web/assets/chart*

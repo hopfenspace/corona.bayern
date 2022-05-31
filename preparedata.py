@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os, re, json, demjson, datetime, urllib.request
+import os, re, json, datetime, urllib.request
 
 # you can obtain the county-centres-bavaria.json file by running the following
 #  query on overpass-turbo.eu and export the result as GeoJSON
@@ -81,5 +81,8 @@ timestamp = datetime.datetime.strptime(timestamp, "%d.%m.%Y, %H:%M").isoformat()
 with open("web/history/{}.json".format(timestamp), "w+", encoding="utf-8") as fd:
     json.dump(bavariaData, fd, indent=4)
 
-os.unlink("web/data.json")
+try:
+    os.unlink("web/data.json")
+except:
+    pass
 os.symlink("history/{}.json".format(timestamp), "web/data.json")
